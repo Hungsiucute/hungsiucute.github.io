@@ -1,10 +1,10 @@
 <!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Pixel Poacher</title>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
 <style>
 :root{--bg:#0d1218;--pn:#efe3c0;--tx:#2a2118;--ac:#b8481e;--bd:#6b5a3a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--pn:#1b2430;--tx:#f2e9c9;--ac:#f5c542;--bd:#3b4b60}}
 :root[data-theme=dark]{--pn:#1b2430;--tx:#f2e9c9;--ac:#f5c542;--bd:#3b4b60}
-html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:ui-monospace,Menlo,Consolas,monospace}
+html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation;margin:0;height:100%;background:var(--bg);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:ui-monospace,Menlo,Consolas,monospace}
 canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated}
 #hud{position:fixed;left:10px;top:calc(8px + env(safe-area-inset-top,0px));color:#fff;font-size:14px;text-shadow:1px 1px 0 #000,-1px -1px 0 #000;line-height:1.5}
 #toast{position:fixed;left:50%;top:22%;transform:translateX(-50%);color:#ffe27a;font-size:18px;font-weight:bold;text-shadow:2px 2px 0 #000;text-align:center;pointer-events:none;max-width:90%}
@@ -23,7 +23,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated}
 #pn button:disabled{opacity:.4}
 .r{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px dashed var(--bd)}.r span{flex:1}
 .i{display:inline-block;background-image:var(--at);background-repeat:no-repeat;flex:none}
-#on{right:12px;top:calc(96px + env(safe-area-inset-top,0px));padding:6px 10px}#pn textarea,#pn input{user-select:text;-webkit-user-select:text;font:11px ui-monospace,monospace}</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body>
+#on{right:12px;top:calc(96px + env(safe-area-inset-top,0px));padding:6px 10px}#pn textarea,#pn input{user-select:text;-webkit-user-select:text;font:16px ui-monospace,monospace}</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body>
 <canvas id=c></canvas><div id=hud></div><div id=toast></div>
 <div id=dp><div class=b data-k=u style="left:59px;top:0">▲</div><div class=b data-k=l style="left:0;top:59px">◀</div><div class=b data-k=r style="left:118px;top:59px">▶</div><div class=b data-k=d style="left:59px;top:118px">▼</div></div>
 <div class=b id=cr>NẤP</div><div class=b id=act>CÂU</div><div class=b id=sh>🛒 SHOP</div><div class=b id=mu>🔊</div><div class=b id=on>🌐</div>
@@ -225,6 +225,9 @@ const BSH=[0,'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAABOCAYAAACkGtGy
 let last=0;function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000);last=t;if(run){upd(dt);draw();amb()}else if(NET.host&&Object.keys(NET.dc).length)hsim(dt)}
 function rs(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W;cv.height=H}
 addEventListener('resize',rs);
+['gesturestart','gesturechange','gestureend','dblclick'].forEach(v=>document.addEventListener(v,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('touchmove',e=>{if(e.touches.length>1||(e.scale&&e.scale!==1))e.preventDefault()},{passive:false});
+let _lt=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-_lt<350&&!/INPUT|TEXTAREA/.test(e.target.tagName))e.preventDefault();_lt=n},{passive:false});
 const kc={ArrowUp:'u',w:'u',ArrowDown:'d',s:'d',ArrowLeft:'l',a:'l',ArrowRight:'r',d:'r'};
 addEventListener('keydown',e=>{const k=kc[e.key];if(k)K[k]=1;if(e.key==' '||e.key=='e'){if(!K.a)K.ae=1;K.a=1;e.preventDefault()}if(e.key=='c')tcr();if(e.key=='b')shop()});
 addEventListener('keyup',e=>{const k=kc[e.key];if(k)K[k]=0;if(e.key==' '||e.key=='e')K.a=0});
